@@ -1,41 +1,64 @@
-# Data
+# data/
 
-The tabulated data (~6 GB) are distributed separately from this repository.
+## Download
 
-**Download:** [to be added]
+The data (~6 GB) are archived on Zenodo: [doi:10.5281/zenodo.23475703](https://doi.org/10.5281/zenodo.23475703).
 
-Unpack the archives into this folder, so that it contains:
+1. Download `data.zip` and place it in the repository root (the folder containing `user_guide.pdf`).
+2. From the repository root, run:
 
+```bash
+   unzip data.zip
+```
+
+This adds `zetaVSxi_grid.txt`, `AttractiveYukawa/`, and `RepulsiveYukawa/` to this directory. This README is left unchanged.
+
+Use the command line rather than double-clicking. Graphical tools such as Finder or Windows "Extract All" may create a separate folder (e.g., `data 2/` or `data/data/`) instead of merging into this one.
+
+After unzipping, the directory should contain:
+
+```
 data/
+├── README.md
 ├── zetaVSxi_grid.txt
 ├── AttractiveYukawa/
-│   ├── PhaseShift/      PhaseShift_A_l=000.txt … PhaseShift_A_l=100.txt
-│   ├── Sommerfeld/      Sommerfeld_A_l=000.txt … Sommerfeld_A_l=100.txt
-│   ├── CrossSections/   sigelas_A.txt, sigT_A.txt, sigV_A.txt
-│   ├── lmax/            lmax_elas_A.txt, lmax_T_A.txt, lmax_V_A.txt
-│   └── T/               T_A_l=000.txt
 └── RepulsiveYukawa/
-    └── (same as above with A → R; no T/ directory)
+```
 
-The notebooks look for the data in `../data/` by default (relative to the
-notebook folder). A different location can be set with the
-`"OutputDirectory"` option of the import functions.
+## Description
 
-## Contents
+This directory contains precomputed data for scattering in the attractive and repulsive Yukawa potentials. The phase shifts, Sommerfeld factors, and irregular-solution quantities are computed using `YukawaVPS.nb`. The elastic, transfer, and viscosity cross sections, together with the corresponding partial-wave truncation values $\ell_{\max}$, are computed using `CrossSectionsVPS.nb`.
 
-- Grid: log10|ζ| ∈ [−4, 7], log10 ξ ∈ [−6, 5], step 0.01, excluding 10|ζ| < ξ.
-- Phase shifts θ_ℓ ∈ (−π, π] and Sommerfeld factors S_ℓ for ℓ = 0, …, 100.
-- Elastic, transfer, and viscosity cross sections normalized to 4π/k²
-  (distinguishable particles), with partial waves up to ℓ = 100, 99, 98.
-- ℓ_max: smallest ℓ beyond which the estimated relative truncation error
-  stays below 1%.
-- T(k; k⋄) for ζ⋄ = 1, s-wave, attractive potential only.
+The datasets are provided to facilitate the use of these quantities without requiring the numerical calculations to be repeated. For details on the data format, import routines, and interpolation, see the [User Guide](../user_guide.pdf).
 
-## Format
+## Grid specification
 
-`zetaVSxi_grid.txt` lists the full (ξ, |ζ|) grid, one point per row, with |ζ|
-running fastest. All other files contain a single column of values in the
-same order, **only** for points with ξ ≤ 10|ζ|. Use `importGrid` and the
-import functions in the notebooks to map the data onto the grid.
+All data are tabulated over the following parameter ranges:
 
-See `user_guide.pdf` for details and the paper for definitions.
+* $\log_{10}|\zeta|\in [-4,7]$
+* $\log_{10}\xi \in [-6,5]$, excluding points satisfying $10\, |\zeta| < \xi$
+* Partial-wave index $\ell=0,\ldots,100$
+
+The logarithmic grid spacing is $\Delta\log_{10}\xi=\Delta\log_{10}|\zeta|= 10^{-2}.$
+
+Thus, $\xi$ and $|\zeta|$ are sampled uniformly in their base-10 logarithms, while $\ell$ takes integer values from 0 to 100.
+
+The region $10\, |\zeta|<\xi$, which approaches the Coulomb limit, is excluded from the numerical scan. The parameter grid file includes this region, but the corresponding entries are omitted from the tabulated calculation results.
+
+## Directory structure
+
+The data are organized by potential type and observable:
+
+* `PhaseShift/`: Partial-wave phase shifts $\theta_\ell(k)$.
+* `Sommerfeld/`: Sommerfeld factors $S_\ell(k)$.
+* `CrossSections/`: Elastic, transfer, and viscosity cross sections, normalized to the $s$-wave unitarity cross section $\sigma_{\ell=0}^{\mathrm{U}}=4\pi/k^2$.
+* `lmax/`: Smallest $\ell_{\max}$ beyond which the geometric-tail estimate of the relative truncation error remains below 1%.
+* `T/`: Irregular-solution data $T(k;k_\diamond)$, provided for the attractive potential and the $s$-wave only.
+
+The data are stored in `AttractiveYukawa/` and `RepulsiveYukawa/`, with files labeled `A` and `R`, respectively. The `T/` directory is present only for the attractive potential.
+
+The file `zetaVSxi_grid.txt` contains the parameter grid. Note that the grid includes points in the excluded region, whereas the corresponding observable files contain entries only for points included in the numerical calculations. See the [User Guide](../user_guide.pdf) for details on mapping the data to the grid and using the provided import and interpolation routines.
+
+## License
+
+The data are distributed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
