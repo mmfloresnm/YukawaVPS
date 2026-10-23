@@ -2,7 +2,7 @@
 
 ## Download
 
-The data (~6 GB) are archived on Zenodo: [doi:10.5281/zenodo.23475703](https://doi.org/10.5281/zenodo.23475703).
+The data (1.6 GB download, ~6 GB unpacked) are archived on Zenodo: [doi:10.5281/zenodo.23475703](https://doi.org/10.5281/zenodo.23475703).
 
 1. Download `data.zip` and place it in the repository root (the folder containing `user_guide.pdf`).
 2. From the repository root, run:
